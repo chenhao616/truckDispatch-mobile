@@ -1,0 +1,151 @@
+<!-- 电铲列表 -->
+<template>
+  <div class="alert" :style="{ height: fullHeight + 'px' }">
+    <DateShiftPicker :default-date="selectedDate" :default-shift="selectedShift" @con-change='onConditionChange'></DateShiftPicker>
+
+    <el-table :data="alertList" class="monitor-data" :height="fullHeight - 72">
+      <el-table-column prop="excavator_name" label="电铲" width="80" align="left"/>
+      <el-table-column prop="dic_name" label="车型" min-width="85" align="center"/>
+
+      <el-table-column v-for="item in names" :key="item.code" :label="item.name" min-width="85" align="right" :prop="item.name"/>
+
+    </el-table>
+  </div>
+</template>
+
+<script>
+  import Vue from 'vue'
+  import {Button, Cell, CellGroup, Dialog, Divider, Field, List, Skeleton, Toast,} from 'vant'
+  import DateShiftPicker from './common/date-shift-picker'
+
+  Vue.use(Dialog)
+  Vue.use(Skeleton)
+  Vue.use(Cell)
+  Vue.use(CellGroup)
+  Vue.use(List)
+  Vue.use(Field)
+  Vue.use(Button)
+  Vue.use(Toast)
+  Vue.use(Divider)
+
+  export default {
+    name: 'main-alert',
+    components: {
+      'DateShiftPicker': DateShiftPicker
+    },
+    data () {
+      return {
+        // names:[],
+        alertList: [],
+        selectedDate: '',
+        selectedShift: ''
+      }
+    },
+    computed: {
+      fullHeight: {
+        get () {
+          let scrHeight = this.$store.state.common.documentClientHeight
+          return scrHeight - 110
+        }
+      },
+      names: {
+        get () {
+          return this.$store.state.common.unloads
+        }
+      }
+    },
+    created: function () {
+      this.selectedDate = this.formatDate(new Date(), 'yyyy-MM-dd')
+      this.selectedShift = 'morning_shift'
+      // this.names = this.$store.state.common.unloads
+    },
+    mounted () {
+      this.loadData()
+    },
+    methods: {
+      onConditionChange (date, shift) {
+        this.selectedDate = date
+        this.selectedShift = shift
+        this.loadData()
+      },
+      loadData () {
+        this.$http({
+          url: this.$http.adornUrl(`/mobile/external/multipleExList`),
+          method: 'get',
+          params: this.$http.adornParams({
+            days: this.selectedDate,
+            classes: this.selectedShift
+          })
+        }).then(({data}) => {
+          if (data && data.code === 0) {
+            this.alertList = data.list
+            // this.names = data.names
+          } else {
+          }
+        })
+      }
+    }
+  }
+</script>
+
+<style scoped>
+  .alert {
+    width: 100%;
+    padding-left:0px;
+    padding-top: 0px;
+    padding-right: 0px;
+    overflow-y: auto;
+    margin: 0 auto;
+  }
+
+  .van-cell-group {
+    margin-bottom: 8px;
+  }
+
+  .van-cell {
+    font-size: 16px;
+    background: none;
+    border-radius: 5px;
+    padding-left: 32px;
+    /* border-bottom: solid 1px #dbdbdb; */
+    /* padding: 16px 0; */
+    /* margin-bottom: 16px; */
+  }
+
+  .menu-title {
+    padding: 0 16px;
+    height: 50px;
+    line-height: 50px;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .alert-threshold {
+    color: #a3a6bd;
+    width: 60px;
+    text-align: left
+  }
+
+  .alert-time {
+    font-size: 12px;
+    transform: scale(0.8);
+    /*color: #a3a6bd;*/
+    padding-top: 5px;
+    padding-left: 5px;
+    overflow: hidden;
+    height: 21px;
+    text-align: center
+  }
+
+  .alert /deep/ .el-table th{
+    background-color: #e4e4e4;
+    color: #555658;
+    border-right: 2px solid #faf7f7;
+  }
+  .alert /deep/ .el-table th:last-child{
+    border: none;
+  }
+  .alert /deep/ .van-radio__label{
+    color: white;
+  }
+</style>

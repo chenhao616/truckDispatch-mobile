@@ -1,0 +1,21 @@
+body {
+  font-family: Microsoft YaHei, Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.alert-color-1{
+  color: #DE0000;
+}
+.alert-color-2{
+  color: #FF8000;
+}
+.alert-color-3{
+  color: #FFC400;
+}
+.alert-color-4{
+  color: #4396FF;
+}
+.font-bold{
+  font-weight: bold;
+}

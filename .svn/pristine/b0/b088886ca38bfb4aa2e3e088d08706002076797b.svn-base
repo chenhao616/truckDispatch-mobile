@@ -1,0 +1,7 @@
+@basePx: 12px;
+@baseColor: #363838;
+@bgColor: #f0ede5;
+@baseBlue: #0f4c81;
+@baseRed: #f26b5b;
+@baseYellow: #c0d725;
+@baseGreen: #7ec845;

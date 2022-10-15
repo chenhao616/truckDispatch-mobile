@@ -1,0 +1,565 @@
+<template>
+  <div class="overview" :style="{ maxHeight: fullHeight + 'px'}">
+
+    <div style="width: 100%;background-color: #0058a5;color: #ffffff;display: flex;flex-direction: row;height: 40px;margin-top: 16px;align-items: center;border-radius: 5px">
+      <div style="width: 25%;font-size: 14px;text-align: right;padding-right: 10px">当前班组</div>
+      <div style="width: 25%;font-size: 15px;text-align: left;font-weight: bold">{{currentTeam}}</div>
+      <div style="width: 1px;background-color: #B3B3B3;height: 15px"></div>
+      <div style="width: 25%;font-size: 14px;text-align: right;padding-right: 10px">当前班次</div>
+      <div style="width: 25%;font-size: 15px;text-align: left;font-weight: bold">{{currentShift}}</div>
+    </div>
+
+    <div class="data-module-small">
+      <div class="data-module-title">卡车在线</div>
+      <div class="data-module-small-content">
+        <span class="online">{{truckOnline}}</span>
+        <span class="content-separate">/</span>
+        <span>{{truckTotal}}</span>
+        <span class="content-unit">台</span>
+      </div>
+    </div>
+    <div class="data-module-small">
+      <div class="data-module-title">电铲在线</div>
+      <div class="data-module-small-content">
+        <span class="online">{{exOnline}}</span>
+        <span class="content-separate">/</span>
+        <span>{{exTotal}}</span>
+        <span class="content-unit">台</span>
+      </div>
+    </div>
+
+    <div class="data-module-small">
+      <div class="data-module-title">矿石信息</div>
+      <div class="data-imp-row">
+        <div class="data-imp-col-1" style="">产量</div>
+        <div class="data-imp-col-2" style="">{{rockYield}}</div>
+        <div class="data-imp-col-3" style="">吨</div>
+      </div>
+      <div class="data-row">
+        <div class="data-col-1" style="">运次</div>
+        <div class="data-col-2" style="">{{rockProduction}}</div>
+        <div class="data-col-3" style="">次</div>
+      </div>
+      <div class="data-row">
+        <div class="data-col-1" style="">运距</div>
+        <div class="data-col-2" style="">{{rockCumulativeDistances}}</div>
+        <div class="data-col-3" style="">m</div>
+      </div>
+    </div>
+
+    <div class="data-module-small">
+      <div class="data-module-title">岩石信息</div>
+      <div class="data-imp-row">
+        <div class="data-imp-col-1" style="">产量</div>
+        <div class="data-imp-col-2" style="">{{oreYield}}</div>
+        <div class="data-imp-col-3" style="">吨</div>
+      </div>
+      <div class="data-row">
+        <div class="data-col-1" style="">运次</div>
+        <div class="data-col-2" style="">{{oreProduction}}</div>
+        <div class="data-col-3" style="">次</div>
+      </div>
+      <div class="data-row" style="margin-bottom: 5px">
+        <div class="data-col-1" style="">运距</div>
+        <div class="data-col-2" style="">{{oreCumulativeDistances}}</div>
+        <div class="data-col-3" style="">m</div>
+      </div>
+    </div>
+
+    <div class="data-module-large" >
+      <div class="data-module-title">车铲状态</div>
+      <div class="data-module-normal-content" style="height: 350px">
+        <div style="height: 100%;">
+
+          <div class="state-row-header">
+            <div class="state-row-header-sub">
+              <div style="width: 10px;height: 10px;border-radius: 5px;background-color: #2D64B3;margin-top: 10px"></div>
+              <div style="padding-left: 5px;height: 40px;line-height: 50px;">卡车</div>
+            </div>
+            <div class="state-row-header-sub">
+              <div style="width: 10px;height: 10px;border-radius: 5px;background-color: #FF8000;margin-top: 10px"></div>
+              <div style="padding-left: 5px;height: 40px;line-height: 50px;">电铲</div>
+            </div>
+          </div>
+
+          <div class="state-row-data" style="margin-top: 10px;">
+            <div class="state-row-data-sub">
+              <div style="text-align: left">正在运行</div>
+              <div style="text-align: right"><span style="font-size: 16px;color: #55a532;font-weight: bold;padding-right: 5px;">{{truckRun}}</span>辆</div>
+            </div>
+            <div class="state-row-data-sub">
+              <div style="text-align: left">正在运行</div>
+              <div style="text-align: right"><span style="font-size: 16px;color: #55a532;font-weight: bold;padding-right: 5px;">{{exRun}}</span>辆</div>
+            </div>
+          </div>
+
+          <div class="state-row-data">
+            <div class="state-row-data-sub">
+              <div style="text-align: left">就绪待命</div>
+              <div style="text-align: right"><span style="font-size: 16px;color: #2a4daa;font-weight: bold;padding-right: 5px;">{{truckAwite}}</span>辆</div>
+            </div>
+            <div class="state-row-data-sub">
+              <div style="text-align: left">就绪待命</div>
+              <div style="text-align: right"><span style="font-size: 16px;color: #2a4daa;font-weight: bold;padding-right: 5px;">{{exAwite}}</span>辆</div>
+            </div>
+          </div>
+
+          <div class="state-row-data">
+            <div class="state-row-data-sub">
+              <div style="text-align: left">故障维修</div>
+              <div style="text-align: right"><span style="font-size: 16px;color: #FF8000;font-weight: bold;padding-right: 5px;">{{truckFault}}</span>辆</div>
+            </div>
+            <div class="state-row-data-sub">
+              <div style="text-align: left">故障维修</div>
+              <div style="text-align: right"><span style="font-size: 16px;color: #FF8000;font-weight: bold;padding-right: 5px;">{{exFault}}</span>辆</div>
+            </div>
+          </div>
+
+          <div id="J_chartLineBox" class="chart-box"></div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</template>
+
+<script>
+  import Vue from 'vue'
+  import {Button, Card, Col, Divider, Field, Image, NoticeBar, Row, Toast} from 'vant'
+
+  Vue.use(Field)
+  Vue.use(Button)
+  Vue.use(Toast)
+  Vue.use(Divider)
+  Vue.use(Col)
+  Vue.use(Row)
+  Vue.use(Image)
+  Vue.use(Card)
+  Vue.use(NoticeBar)
+
+  export default {
+    name: 'main-overview',
+    data () {
+      return {
+        intervalId: null,
+        exOnline: 0,
+        exTotal: 0,
+        truckOnline: 0,
+        truckTotal: 0,
+        currentShift: '白班',
+        currentTeam: '',
+
+        oreCumulativeDistances: 0,
+        oreProduction: 0,
+        oreYield: 0,
+        rockCumulativeDistances: 0,
+        rockProduction: 0,
+        rockYield: 0,
+
+        truckAwite: 0,
+        truckFault: 0,
+        truckRun: 0,
+        exAwite: 0,
+        exFault: 0,
+        exRun: 0,
+
+        chartLine: null,
+        runData: [],
+        awaitData: [],
+        faultData: []
+      }
+    },
+    created () {
+    },
+    computed: {
+      fullHeight: {
+        get () {
+          let scrHeight = this.$store.state.common.documentClientHeight
+          return scrHeight - 114
+        }
+      }
+    },
+    mounted () {
+      this.$nextTick(() => {
+        this.initChart()
+        this.loadData()
+        this.startDataRefresh()
+      })
+    },
+    activated () {
+      // 由于给echart添加了resize事件, 在组件激活时需要重新resize绘画一次, 否则出现空白bug
+      if (this.chartLine) {
+        this.chartLine.resize()
+      }
+    },
+    destroyed () {
+      // 在页面销毁后，清除计时器
+      this.clear()
+    },
+    methods: {
+      // 定时刷新数据函数
+      startDataRefresh () {
+        // 计时器正在进行中，退出函数
+        if (this.intervalId != null) {
+          return
+        }
+        // 计时器为空，操作
+        this.intervalId = setInterval(() => {
+          this.loadData()
+        }, 5000)
+      },
+      // 停止定时器
+      clear () {
+        clearInterval(this.intervalId) //清除计时器
+        this.intervalId = null //设置为null
+      },
+      // 柱状图
+      initChart () {
+        let option = {
+          tooltip: {
+            trigger: 'axis'
+            // formatter: '{b0}级 <br />报警次数：{c0}'
+            // formatter: function() {
+            //   console.log(arguments)
+            // }
+          },
+          grid: {
+            left: '16px',
+            right: '32px',
+            bottom: '16px',
+            top: '36px',
+            containLabel: true
+          },
+          yAxis: {
+            type: 'value',
+            minInterval: 1
+          },
+          xAxis: {
+            type: 'category',
+            data: ['卡车', '电铲']
+          },
+          series: [
+            {
+              name: '正在运行',
+              type: 'bar',
+              data: this.runData,
+              barWidth: 30,
+              itemStyle: {
+                normal: {
+                  color: '#00CC00'
+                }
+              }
+            },
+            {
+              name: '就绪待命',
+              type: 'bar',
+              data: this.awaitData,
+              barWidth: 30,
+              itemStyle: {
+                normal: {
+                  color: '#2a4daa'
+                }
+              }
+            },
+            {
+              name: '故障维修',
+              type: 'bar',
+              data: this.faultData,
+              barWidth: 30,
+              itemStyle: {
+                normal: {
+                  color: '#FF8000'
+                }
+              }
+            }
+          ]
+        }
+
+        this.chartLine = this.$echarts.init(
+          document.getElementById('J_chartLineBox')
+        )
+
+        this.chartLine.setOption(option)
+        window.addEventListener('resize', () => {
+          this.chartLine.resize()
+        })
+      },
+      setChartData () {
+        if (!this.chartLine) {
+          this.initChart()
+          return
+        }
+
+        let option = this.chartLine.getOption()
+        // option.xAxis[0].data = data.xData
+        option.series[0].data = this.runData
+        option.series[1].data = this.awaitData
+        option.series[2].data = this.faultData
+
+        this.chartLine.setOption(option, true)
+      },
+      loadData () {
+        this.$http({
+          url: this.$http.adornUrl(`/mobile/external/overView`),
+          method: 'get',
+          params: this.$http.adornParams({
+          }),
+          headers: {
+            'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
+          }
+        }).then(({data}) => {
+          if (data && data.code === 0) {
+            this.exOnline = data.exOnline
+            this.exTotal = data.exTotal
+            this.truckOnline = data.truckOnline
+            this.truckTotal = data.truckTotal
+
+            this.currentShift = data.base.currentShift
+            this.currentTeam = data.base.currentTeam
+
+            this.oreCumulativeDistances = data.base.oreCumulativeDistances
+            this.oreProduction = data.base.oreProduction
+            this.oreYield = data.base.oreYield
+            this.rockCumulativeDistances = data.base.rockCumulativeDistances
+            this.rockProduction = data.base.rockProduction
+            this.rockYield = data.base.rockYield
+
+            this.truckAwite = data.base.truckAwite
+            this.truckFault = data.base.truckFault
+            this.truckRun = data.base.truckRun
+            this.exAwite = data.base.exAwite
+            this.exFault = data.base.exFault
+            this.exRun = data.base.exRun
+
+            // this.alarmCount = [data.data.alarmCount[4], data.data.alarmCount[3], data.data.alarmCount[2], data.data.alarmCount[1]]
+            this.runData = [this.truckRun, this.exRun]
+            this.awaitData = [this.truckAwite, this.exAwite]
+            this.faultData = [this.truckFault, this.exFault]
+            this.setChartData()
+          } else {
+          }
+        })
+      }
+    }
+  }
+</script>
+
+<style scoped>
+  .overview {
+    /*width: calc(100% - 32px);*/
+    width: 100%;
+    padding-left:16px;
+    padding-top: 0px;
+    padding-right: 16px;
+    padding-bottom: 5px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 0 auto;
+    background-color: #f2f2f2;
+  }
+
+  .data-module-small,
+  .data-module-normal,
+  .data-module-large,
+  .data-module-mini {
+    margin-top: 16px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 5px #0000003a;
+    overflow: hidden;
+    grid-auto-flow: row dense;
+  }
+
+  .data-module-title {
+    height: 24px;
+    line-height: 24px;
+    padding-left: 16px;
+    background-color: #e4e4e4;
+  }
+
+  .data-module-large {
+    width: 100%;
+  }
+
+  .data-module-normal,
+  .data-module-small {
+    width: calc(50% - 8px);
+  }
+
+  .data-module-mini {
+    width: calc(25% - 8px);
+  }
+
+  .data-module-large-content,
+  .data-module-normal-content,
+  .data-module-small-content,
+  .data-module-mini-content {
+    text-align: center;
+    font-size: 32px;
+    font-weight: 600;
+    background-color: #fff;
+  }
+
+  .data-module-normal-content {
+    height: 140px;
+    line-height: 140px;
+  }
+
+  .data-module-small-content {
+    height: 50px;
+    line-height: 50px;
+  }
+
+  .data-module-mini-title {
+    height: 24px;
+    line-height: 24px;
+    text-align: center;
+    background-color: #e4e4e4;
+  }
+
+  .data-module-mini-content {
+    height: 50px;
+    line-height: 50px;
+  }
+
+  .online {
+    color: #008000;
+  }
+
+  .content-unit {
+    font-size: 16px;
+    font-weight: normal;
+  }
+
+  .content-separate {
+    font-weight: normal;
+    /* line-height: 50px; */
+    font-size: 24px;
+    color: #afafaf;
+  }
+
+  .chart-box {
+    min-height: 200px;
+    height: 200px;
+  }
+
+  .alert-row {
+    height: 50%;
+    line-height: 70px;
+    font-size: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-items: center;
+    padding: 0px 20px 0px 20px;
+  }
+
+  .alert-data {
+    height: 50%;
+    line-height: 50px;
+    display: flex;
+    flex-direction: row;
+    justify-items: center;
+    padding: 0px 20px 0px 20px;
+  }
+
+  .data-imp-row {
+    font-size: 14px;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    height: 40px;
+    line-height: 40px
+  }
+
+  .data-imp-col-1 {
+    width: 30%;
+    text-align: right;
+    line-height: 30px;
+    padding-top: 5px;
+  }
+
+  .data-imp-col-2 {
+    width: 50%;
+    text-align: right;
+    color: #0058a5;
+    font-weight: 600;
+    font-size: 26px;
+    padding-right: 5px
+  }
+
+  .data-imp-col-3 {
+    width: 20%;
+    text-align: left;
+    line-height: 30px;
+    padding-top: 5px;
+  }
+
+  .data-row {
+    font-size: 14px;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    height: 30px;
+    line-height: 30px
+  }
+  .data-col-1 {
+    width: 30%;
+    text-align: right;
+  }
+
+  .data-col-2 {
+    width: 50%;
+    text-align: right;
+    padding-right: 5px;
+    font-weight: bold;
+    font-size: 16px;
+  }
+
+  .data-col-3 {
+    width: 20%;
+    text-align: left;
+  }
+
+  .state-row-header {
+    display: flex;
+    height: 40px;
+    width: 100%;
+    font-size: 16px;
+    line-height: 40px;
+    align-items: center;
+  }
+
+  .state-row-header-sub {
+    display: flex;
+    height: 40px;
+    width: calc(50% - 60px);
+    align-items: center;
+    margin-left: 30px;
+    margin-right: 30px;
+    border-bottom: solid 1px #e0e0e0
+  }
+
+  .state-row-data {
+    display: flex;
+    height: 30px;
+    width: 100%;
+    font-size: 14px;
+    line-height: 30px;
+    align-items: center;
+    font-weight: normal
+  }
+
+  .state-row-data-sub {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    font-size: 14px;
+    align-items: center;
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+</style>
